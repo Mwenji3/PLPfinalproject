@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report a Water Issue</title>
+</head>
+<body>
+    <h1>Report a Water Source Issue</h1>
+    <form action="/submit-report" method="POST">
+        <label for="location">Water Source Location:</label>
+        <input type="text" id="location" name="location" required><br>
+
+        <label for="issue">Describe the Issue:</label>
+        <textarea id="issue" name="issue" required></textarea><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+  
+      fetch('/api/report', {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id: 1, // Example user ID
+          water_source_id: 1, // Example water source ID
+          report_details: formData.get('issue')
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.text())
+        .then(message => alert(message));
+    });
+  </script>
+  

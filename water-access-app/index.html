@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Sources Map</title>
+    <style>
+        /* Size of the map */
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Water Sources</h1>
+    </header>  
+    <div id="map"></div>
+    <button class="submit-btn">Submit Report</button>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLuPhk0lb3xb4F9bbJp_cwOKMVQHgzGXg&callback=initMap" async defer></script>
+
+    <script>
+        let map;
+
+        // Initialize the map
+        function initMap() {
+            // The location of the center
+            const centerLocation = { lat: -1.286389, lng: 36.817223 };
+
+            // Create a map object
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: centerLocation,
+                zoom: 10,
+            });
+
+            // Fetch water sources from your backend
+            fetch('/api/water-sources')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(source => {
+                        const position = { lat: parseFloat(source.latitude), lng: parseFloat(source.longitude) };
+
+                        // Add a marker for each water source
+                        const marker = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: `Water Source at ${source.location}`
+                        });
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
+
